@@ -32,4 +32,10 @@ public class AynaHomePage extends BasePage {
         this.wait.until(ExpectedConditions.elementToBeClickable(service));
         service.click();
     }
+
+    public void hoverOverEServices() {
+        WebElement link = waitAndReturnElement(eServicesLinkLocator);
+        // Use Actions to simulate a physical mouse hover
+        new org.openqa.selenium.interactions.Actions(this.driver).moveToElement(link).perform();
+    }
 }

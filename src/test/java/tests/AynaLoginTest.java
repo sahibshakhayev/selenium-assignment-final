@@ -43,6 +43,7 @@ public class AynaLoginTest {
         // 1. Start at the Home Page and open the ASAN modal
         AynaHomePage homePage = new AynaHomePage(this.driver);
         homePage.open();
+        homePage.hoverOverEServices();
         homePage.clickEServices();
         homePage.clickElektronFormulyarService();
         
@@ -66,6 +67,21 @@ public class AynaLoginTest {
         // Assert that the red box appears and contains the expected text
         Assert.assertTrue("The ASAN login should reject fake credentials and show an error", 
             errorText.contains("yanlışdır"));
+    }
+
+
+    @Test
+    public void testCookieManipulation() {
+        AynaHomePage homePage = new AynaHomePage(this.driver);
+        homePage.open();
+        
+        // 1. Add a custom cookie to the browser
+        this.driver.manage().addCookie(new org.openqa.selenium.Cookie("automation_test", "passed"));
+        
+        // 2. Read it back to verify it was saved successfully
+        org.openqa.selenium.Cookie testCookie = this.driver.manage().getCookieNamed("automation_test");
+        Assert.assertNotNull("Cookie should be successfully added", testCookie);
+        Assert.assertEquals("passed", testCookie.getValue());
     }
 
     @After

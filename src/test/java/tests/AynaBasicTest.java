@@ -68,6 +68,19 @@ public class AynaBasicTest {
         Assert.assertEquals("Browser should go forward to the E-Services URL", newUrl, this.driver.getCurrentUrl());
     }
 
+
+    @Test
+    public void testStaticHomePageContent() {
+        AynaHomePage homePage = new AynaHomePage(this.driver);
+        homePage.open();
+        
+        // Grab the text of the entire page body
+        String bodyText = this.driver.findElement(org.openqa.selenium.By.tagName("body")).getText();
+        
+        // Verify standard static text is present
+        Assert.assertTrue("The home page should display 'E-xidmətlər'", bodyText.contains("E-xidmətlər"));
+    }
+
     @After
     public void close() {
         if (this.driver != null) {
