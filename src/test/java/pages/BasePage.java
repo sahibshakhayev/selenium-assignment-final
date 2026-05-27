@@ -15,7 +15,7 @@ public class BasePage {
         this.wait = new WebDriverWait(driver, 10);
     }
 
-    // Helper method you will use constantly
+    // Helper method
     protected WebElement waitAndReturnElement(By locator) {
         this.wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         return this.driver.findElement(locator);

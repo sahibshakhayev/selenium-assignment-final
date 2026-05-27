@@ -18,7 +18,7 @@ public class AynaBasicTest {
     @Before
     public void setup() throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
-        // Connect to your Docker Selenium container
+        // Connect to Docker Selenium container
         this.driver = new RemoteWebDriver(new URL("http://selenium:4444/wd/hub"), options);
         this.driver.manage().window().maximize();
     }
@@ -30,11 +30,42 @@ public class AynaBasicTest {
 
         // Perform actions
         homePage.open();
+        Assert.assertTrue(driver.getTitle().contains("Əsas"));
         homePage.clickEServices();
 
         // Verify the result by checking the current URL or page body
         String bodyText = homePage.getBodyText();
         Assert.assertTrue("The page should contain e-services content", bodyText.contains("Xidmətlər"));
+    }
+
+    @Test
+    public void testBrowserHistoryNavigation() throws InterruptedException {
+        AynaHomePage homePage = new AynaHomePage(this.driver);
+
+        // 1. Open the Home Page and save its URL
+        homePage.open();
+        
+        // Wait a moment for the URL to fully register, then save it
+        Thread.sleep(1500); 
+        String initialUrl = this.driver.getCurrentUrl();
+
+        // 2. Navigate to a new page (E-Services)
+        homePage.clickEServices();
+        Thread.sleep(1500);
+        String newUrl = this.driver.getCurrentUrl();
+
+        // Verify we actually went to a new page
+        Assert.assertNotEquals("URL should change after clicking E-Services", initialUrl, newUrl);
+
+        // 3. Test the BACK button
+        this.driver.navigate().back();
+        Thread.sleep(1500);
+        Assert.assertEquals("Browser should return to the initial URL", initialUrl, this.driver.getCurrentUrl());
+
+        // 4. Test the FORWARD button
+        this.driver.navigate().forward();
+        Thread.sleep(1500);
+        Assert.assertEquals("Browser should go forward to the E-Services URL", newUrl, this.driver.getCurrentUrl());
     }
 
     @After
